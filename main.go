@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/alxdsz/aoc2024/internal/day1"
 	"github.com/alxdsz/aoc2024/internal/day2"
+	"github.com/alxdsz/aoc2024/internal/day3"
 )
 
 func main() {
@@ -18,4 +19,10 @@ func main() {
 	d2p2 := d2.SolvePart2()
 	fmt.Printf("d2p1: %d\n", d2p1)
 	fmt.Printf("d2p2: %d\n\n", d2p2)
+
+	d3 := day3.NewDay3Solver("./inputs/d3.txt")
+	d3p1 := d3.SolvePart1()
+	d3p2 := d3.SolvePart2()
+	fmt.Printf("d3p1: %d\n", d3p1)
+	fmt.Printf("d3p2: %d\n", d3p2)
 }

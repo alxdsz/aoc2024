@@ -2,8 +2,8 @@ package day2
 
 import (
 	"github.com/alxdsz/aoc2024/internal/input"
+	"github.com/alxdsz/aoc2024/internal/utils"
 	"math"
-	"strconv"
 	"strings"
 )
 
@@ -27,12 +27,6 @@ func (d *Day2Solver) SolvePart1() int {
 		}
 	}
 	return result
-}
-
-func unsafeAtoi(a, b string) (int, int) {
-	ia, _ := strconv.Atoi(a)
-	ib, _ := strconv.Atoi(b)
-	return ia, ib
 }
 
 func (d *Day2Solver) SolvePart2() int {
@@ -66,8 +60,8 @@ func (d *Day2Solver) isReportSafe(nums []string, enableDampenerFallback bool) bo
 	isSafe := true
 	var shouldAscend bool
 	for i, _ := range nums[:len(nums)-1] {
-		curr, next := unsafeAtoi(nums[i], nums[i+1])
-		diff := curr - next
+		n := utils.UnsafeAtoi(nums[i], nums[i+1])
+		diff := n[0] - n[1]
 		if i == 0 {
 			shouldAscend = diff < 0
 		}
