@@ -5,9 +5,13 @@ import (
 	"github.com/alxdsz/aoc2024/internal/day1"
 	"github.com/alxdsz/aoc2024/internal/day2"
 	"github.com/alxdsz/aoc2024/internal/day3"
+	"github.com/alxdsz/aoc2024/internal/day4"
+	"github.com/alxdsz/aoc2024/internal/input"
 )
 
 func main() {
+	// TODO extract inputs from solver
+
 	d1 := day1.NewDay1Solver("./inputs/d1.txt")
 	d1p1 := d1.SolvePart1()
 	d1p2 := d1.SolvePart2()
@@ -25,4 +29,12 @@ func main() {
 	d3p2 := d3.SolvePart2()
 	fmt.Printf("d3p1: %d\n", d3p1)
 	fmt.Printf("d3p2: %d\n", d3p2)
+
+	inpt, _ := input.ReadFile("./inputs/d4.txt")
+	i := inpt.AsArray()
+	d4 := day4.NewDay4Solver(i)
+	d4p1 := d4.SolvePart1()
+	d4p2 := d4.SolvePart2()
+	fmt.Printf("d4p1: %d\n", d4p1)
+	fmt.Printf("d4p2: %d\n", d4p2)
 }
