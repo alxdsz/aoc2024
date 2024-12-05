@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/alxdsz/aoc2024/internal/day1"
 	"github.com/alxdsz/aoc2024/internal/day2"
@@ -8,41 +9,78 @@ import (
 	"github.com/alxdsz/aoc2024/internal/day4"
 	"github.com/alxdsz/aoc2024/internal/day5"
 	"github.com/alxdsz/aoc2024/internal/input"
+	"time"
 )
 
+type Solver interface {
+	SolvePart1() int
+	SolvePart2() int
+}
+
+type SolverFactory func(string) Solver
+
+var solvers = make(map[int]SolverFactory)
+
+func Register(day int, factory SolverFactory) {
+	solvers[day] = factory
+}
+
 func main() {
-	// TODO extract inputs from solver
+	// Command line flags
+	day := flag.Int("day", 0, "Day to solve (0 for all days)")
+	part := flag.Int("part", 0, "Part to solve (0 for both parts)")
+	flag.Parse()
 
-	d1 := day1.NewDay1Solver("./inputs/d1.txt")
-	d1p1 := d1.SolvePart1()
-	d1p2 := d1.SolvePart2()
-	fmt.Printf("d1p1: %d\n", d1p1)
-	fmt.Printf("d1p2: %d\n\n", d1p2)
+	// Register all solvers
+	Register(1, func(input string) Solver { return day1.NewDay1Solver(input) })
+	Register(2, func(input string) Solver { return day2.NewDay2Solver(input) })
+	Register(3, func(input string) Solver { return day3.NewDay3Solver(input) })
+	Register(4, func(i string) Solver {
+		inpt, _ := input.ReadFile(i)
+		return day4.NewDay4Solver(inpt.AsArray())
+	})
+	Register(5, func(i string) Solver {
+		inpt, _ := input.ReadFile(i)
+		return day5.NewDay5Solver(inpt.SplitByEmptyLine())
+	})
 
-	d2 := day2.NewDay2Solver("./inputs/d2.txt")
-	d2p1 := d2.SolvePart1()
-	d2p2 := d2.SolvePart2()
-	fmt.Printf("d2p1: %d\n", d2p1)
-	fmt.Printf("d2p2: %d\n\n", d2p2)
+	if *day == 0 {
+		runAllDays(*part)
+	} else {
+		runDay(*day, *part)
+	}
+}
 
-	d3 := day3.NewDay3Solver("./inputs/d3.txt")
-	d3p1 := d3.SolvePart1()
-	d3p2 := d3.SolvePart2()
-	fmt.Printf("d3p1: %d\n", d3p1)
-	fmt.Printf("d3p2: %d\n", d3p2)
+func runDay(day, part int) {
+	solver, exists := solvers[day]
+	if !exists {
+		fmt.Printf("Day %d not implemented yet\n", day)
+		return
+	}
 
-	inpt, _ := input.ReadFile("./inputs/d4.txt")
-	i := inpt.AsArray()
-	d4 := day4.NewDay4Solver(i)
-	d4p1 := d4.SolvePart1()
-	d4p2 := d4.SolvePart2()
-	fmt.Printf("d4p1: %d\n", d4p1)
-	fmt.Printf("d4p2: %d\n", d4p2)
+	inputPath := fmt.Sprintf("./inputs/d%d.txt", day)
+	s := solver(inputPath)
 
-	inpt2, _ := input.ReadFile("./inputs/d5.txt")
-	d5 := day5.NewDay5Solver(inpt2.SplitByEmptyLine())
-	d5p1 := d5.SolvePart1()
-	d5p2 := d5.SolvePart2()
-	fmt.Printf("d5p1: %d\n", d5p1)
-	fmt.Printf("d5p2: %d\n", d5p2)
+	start := time.Now()
+
+	if part == 0 || part == 1 {
+		result := s.SolvePart1()
+		elapsed := time.Since(start)
+		fmt.Printf("Day %d Part 1: %d (took %s)\n", day, result, elapsed)
+	}
+
+	if part == 0 || part == 2 {
+		result := s.SolvePart2()
+		elapsed := time.Since(start)
+		fmt.Printf("Day %d Part 2: %d (took %s)\n", day, result, elapsed)
+	}
+}
+
+func runAllDays(part int) {
+	for day := 1; day <= 25; day++ {
+		if _, exists := solvers[day]; exists {
+			fmt.Printf("\nRunning Day %d:\n", day)
+			runDay(day, part)
+		}
+	}
 }
