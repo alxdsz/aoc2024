@@ -6,6 +6,7 @@ import (
 	"github.com/alxdsz/aoc2024/internal/day2"
 	"github.com/alxdsz/aoc2024/internal/day3"
 	"github.com/alxdsz/aoc2024/internal/day4"
+	"github.com/alxdsz/aoc2024/internal/day5"
 	"github.com/alxdsz/aoc2024/internal/input"
 )
 
@@ -37,4 +38,11 @@ func main() {
 	d4p2 := d4.SolvePart2()
 	fmt.Printf("d4p1: %d\n", d4p1)
 	fmt.Printf("d4p2: %d\n", d4p2)
+
+	inpt2, _ := input.ReadFile("./inputs/d5.txt")
+	d5 := day5.NewDay5Solver(inpt2.SplitByEmptyLine())
+	d5p1 := d5.SolvePart1()
+	d5p2 := d5.SolvePart2()
+	fmt.Printf("d5p1: %d\n", d5p1)
+	fmt.Printf("d5p2: %d\n", d5p2)
 }

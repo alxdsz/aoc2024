@@ -51,3 +51,20 @@ func (inp *Input) AsArray() [][]string {
 	}
 	return array
 }
+
+func (inp *Input) SplitByEmptyLine() [][]string {
+	var result [][]string
+	var current []string
+	for _, line := range inp.Lines() {
+		if line == "" {
+			result = append(result, current)
+			current = nil
+		} else {
+			current = append(current, line)
+		}
+	}
+	if len(current) > 0 {
+		result = append(result, current)
+	}
+	return result
+}
