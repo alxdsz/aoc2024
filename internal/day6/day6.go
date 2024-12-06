@@ -6,6 +6,8 @@ import (
 	"image/color"
 )
 
+// TODO remove duplications
+
 type Solver struct {
 	board     [][]string
 	starPoint []int
