@@ -41,7 +41,7 @@ func (inp *Input) UnzipWhiteSpaceSeparatedLists() (left []int, right []int) {
 	return left, right
 }
 
-func (inp *Input) AsArray() [][]string {
+func (inp *Input) As2DArray() [][]string {
 	array := make([][]string, len(inp.lines))
 	for y, line := range inp.Lines() {
 		array[y] = make([]string, len(line))

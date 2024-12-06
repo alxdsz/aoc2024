@@ -1,6 +1,7 @@
 package day5
 
 import (
+	"github.com/alxdsz/aoc2024/internal/input"
 	"math"
 	"slices"
 	"sort"
@@ -8,30 +9,33 @@ import (
 	"strings"
 )
 
-type Day5Solver struct {
+type Solver struct {
 	pages []string
 	// slice is fast enough :)
 	leftRuleMap  map[string][]string
 	rightRuleMap map[string][]string
 }
 
-func NewDay5Solver(input [][]string) *Day5Solver {
+func NewSolver(inputPath string) *Solver {
+	inpt, _ := input.ReadFile(inputPath)
+	inputSplit := inpt.SplitByEmptyLine()
+
 	leftRuleMap := make(map[string][]string)
 	rightRuleMap := make(map[string][]string)
-	for _, rule := range input[0] {
+	for _, rule := range inputSplit[0] {
 		splitRule := strings.Split(rule, "|")
 		left, right := splitRule[0], splitRule[1]
 		leftRuleMap[left] = append(leftRuleMap[left], right)
 		rightRuleMap[right] = append(rightRuleMap[right], left)
 	}
-	return &Day5Solver{
+	return &Solver{
 		leftRuleMap:  leftRuleMap,
 		rightRuleMap: rightRuleMap,
-		pages:        input[1],
+		pages:        inputSplit[1],
 	}
 }
 
-func (d *Day5Solver) isRowCorrect(splitPageRow []string) bool {
+func (d *Solver) isRowCorrect(splitPageRow []string) bool {
 	for i, page := range splitPageRow {
 		pagesOnLeft := splitPageRow[:i]
 		pagesOnRight := splitPageRow[i+1:]
@@ -49,7 +53,7 @@ func (d *Day5Solver) isRowCorrect(splitPageRow []string) bool {
 	return true
 }
 
-func (d *Day5Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() int {
 	result := 0
 	for _, pageRow := range d.pages {
 		splitPageRow := strings.Split(pageRow, ",")
@@ -63,7 +67,7 @@ func (d *Day5Solver) SolvePart1() int {
 	return result
 }
 
-func (d *Day5Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() int {
 	result := 0
 	for _, pageRow := range d.pages {
 		splitPageRow := strings.Split(pageRow, ",")

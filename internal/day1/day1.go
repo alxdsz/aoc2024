@@ -6,23 +6,23 @@ import (
 	"sort"
 )
 
-type Day1Solver struct {
+type Solver struct {
 	left  []int
 	right []int
 }
 
-func NewDay1Solver(inputPath string) *Day1Solver {
+func NewSolver(inputPath string) *Solver {
 	inp, _ := input.ReadFile(inputPath)
 	left, right := inp.UnzipWhiteSpaceSeparatedLists()
 	sort.Ints(left)
 	sort.Ints(right)
-	return &Day1Solver{
+	return &Solver{
 		left:  left,
 		right: right,
 	}
 }
 
-func (d *Day1Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() int {
 	result := 0
 	for i, leftNumber := range d.left {
 		rightNumber := d.right[i]
@@ -31,7 +31,7 @@ func (d *Day1Solver) SolvePart1() int {
 	return result
 }
 
-func (d *Day1Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() int {
 	freqMap := make(map[int]int)
 	for _, rightNumber := range d.right {
 		freqMap[rightNumber]++

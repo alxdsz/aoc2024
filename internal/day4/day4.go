@@ -1,21 +1,19 @@
 package day4
 
 import (
+	"github.com/alxdsz/aoc2024/internal/input"
 	"strings"
 )
 
-type Day4Solver struct {
+type Solver struct {
 	input [][]string
 }
 
-func NewDay4Solver(input [][]string) *Day4Solver {
-	hitMatrix := make([][]bool, len(input))
-	for i := range hitMatrix {
-		hitMatrix[i] = make([]bool, len(input[0]))
-	}
-
-	return &Day4Solver{
-		input: input,
+func NewSolver(inputPath string) *Solver {
+	inpt, _ := input.ReadFile(inputPath)
+	inputAsArray := inpt.As2DArray()
+	return &Solver{
+		input: inputAsArray,
 	}
 }
 
@@ -23,7 +21,7 @@ func matchesTarget(s string, tsd TraverseSearchData) bool {
 	return s == tsd.searchedWord || s == tsd.searchedWordReversed
 }
 
-func (d *Day4Solver) traverseForward(x, y int, tsd TraverseSearchData) bool {
+func (d *Solver) traverseForward(x, y int, tsd TraverseSearchData) bool {
 	wordLength := len(tsd.searchedWord)
 	currentLetter := d.input[y][x]
 	if x <= tsd.rightBoundary && strings.Contains(tsd.searchedWord, currentLetter) {
@@ -38,7 +36,7 @@ func (d *Day4Solver) traverseForward(x, y int, tsd TraverseSearchData) bool {
 	return false
 }
 
-func (d *Day4Solver) traverseDown(x, y int, tsd TraverseSearchData) bool {
+func (d *Solver) traverseDown(x, y int, tsd TraverseSearchData) bool {
 	wordLength := len(tsd.searchedWord)
 	currentLetter := d.input[y][x]
 	if y <= tsd.bottomBoundary && strings.Contains(tsd.searchedWord, currentLetter) {
@@ -53,7 +51,7 @@ func (d *Day4Solver) traverseDown(x, y int, tsd TraverseSearchData) bool {
 	return false
 }
 
-func (d *Day4Solver) traverseDiagonalRight(x, y int, tsd TraverseSearchData) bool {
+func (d *Solver) traverseDiagonalRight(x, y int, tsd TraverseSearchData) bool {
 	wordLength := len(tsd.searchedWord)
 	currentLetter := d.input[y][x]
 	if y <= tsd.bottomBoundary && x <= tsd.rightBoundary && strings.Contains(tsd.searchedWord, currentLetter) {
@@ -68,7 +66,7 @@ func (d *Day4Solver) traverseDiagonalRight(x, y int, tsd TraverseSearchData) boo
 	return false
 }
 
-func (d *Day4Solver) traverseDiagonalLeft(x, y int, tsd TraverseSearchData) bool {
+func (d *Solver) traverseDiagonalLeft(x, y int, tsd TraverseSearchData) bool {
 	wordLength := len(tsd.searchedWord)
 	currentLetter := d.input[y][x]
 	if y <= tsd.bottomBoundary && x >= tsd.leftBoundary && strings.Contains(tsd.searchedWord, currentLetter) {
@@ -92,7 +90,7 @@ type TraverseSearchData struct {
 	searchedWordReversed string
 }
 
-func (d *Day4Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() int {
 	searchedWord := "XMAS"
 	searchedWordReversed := "SAMX"
 	tsd := TraverseSearchData{
@@ -123,7 +121,7 @@ func (d *Day4Solver) SolvePart1() int {
 	return result
 }
 
-func (d *Day4Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() int {
 	searchedWord := "MAS"
 	searchedWordReversed := "SAM"
 	tsd := TraverseSearchData{

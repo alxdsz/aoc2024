@@ -7,18 +7,18 @@ import (
 	"strings"
 )
 
-type Day2Solver struct {
+type Solver struct {
 	rows []string
 }
 
-func NewDay2Solver(inputhPath string) *Day2Solver {
+func NewSolver(inputhPath string) *Solver {
 	inpt, _ := input.ReadFile(inputhPath)
-	return &Day2Solver{
+	return &Solver{
 		rows: inpt.Lines(),
 	}
 }
 
-func (d *Day2Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() int {
 	result := 0
 	for _, row := range d.rows {
 		nums := strings.Split(row, " ")
@@ -29,7 +29,7 @@ func (d *Day2Solver) SolvePart1() int {
 	return result
 }
 
-func (d *Day2Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() int {
 	result := 0
 	for _, row := range d.rows {
 		nums := strings.Split(row, " ")
@@ -40,7 +40,7 @@ func (d *Day2Solver) SolvePart2() int {
 	return result
 }
 
-func (d *Day2Solver) removeElement(slice []string, s int) []string {
+func (d *Solver) removeElement(slice []string, s int) []string {
 	newSlice := make([]string, 0, len(slice)-1)
 	for i, _ := range slice {
 		if i != s {
@@ -50,13 +50,13 @@ func (d *Day2Solver) removeElement(slice []string, s int) []string {
 	return newSlice
 }
 
-func (d *Day2Solver) isSafe(diff int, shouldAscend bool) bool {
+func (d *Solver) isSafe(diff int, shouldAscend bool) bool {
 	isAsc := diff < 0
 	delta := math.Abs(float64(diff))
 	return delta >= 1 && delta <= 3 && isAsc == shouldAscend
 }
 
-func (d *Day2Solver) isReportSafe(nums []string, enableDampenerFallback bool) bool {
+func (d *Solver) isReportSafe(nums []string, enableDampenerFallback bool) bool {
 	isSafe := true
 	var shouldAscend bool
 	for i, _ := range nums[:len(nums)-1] {

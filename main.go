@@ -8,7 +8,7 @@ import (
 	"github.com/alxdsz/aoc2024/internal/day3"
 	"github.com/alxdsz/aoc2024/internal/day4"
 	"github.com/alxdsz/aoc2024/internal/day5"
-	"github.com/alxdsz/aoc2024/internal/input"
+	"github.com/alxdsz/aoc2024/internal/day6"
 	"time"
 )
 
@@ -32,17 +32,12 @@ func main() {
 	flag.Parse()
 
 	// Register all solvers
-	Register(1, func(input string) Solver { return day1.NewDay1Solver(input) })
-	Register(2, func(input string) Solver { return day2.NewDay2Solver(input) })
-	Register(3, func(input string) Solver { return day3.NewDay3Solver(input) })
-	Register(4, func(i string) Solver {
-		inpt, _ := input.ReadFile(i)
-		return day4.NewDay4Solver(inpt.AsArray())
-	})
-	Register(5, func(i string) Solver {
-		inpt, _ := input.ReadFile(i)
-		return day5.NewDay5Solver(inpt.SplitByEmptyLine())
-	})
+	Register(1, func(input string) Solver { return day1.NewSolver(input) })
+	Register(2, func(input string) Solver { return day2.NewSolver(input) })
+	Register(3, func(input string) Solver { return day3.NewSolver(input) })
+	Register(4, func(input string) Solver { return day4.NewSolver(input) })
+	Register(5, func(input string) Solver { return day5.NewSolver(input) })
+	Register(6, func(input string) Solver { return day6.NewSolver(input) })
 
 	if *day == 0 {
 		runAllDays(*part)
