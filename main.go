@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/alxdsz/aoc2024/internal/day1"
+	"github.com/alxdsz/aoc2024/internal/day10"
 	"github.com/alxdsz/aoc2024/internal/day2"
 	"github.com/alxdsz/aoc2024/internal/day3"
 	"github.com/alxdsz/aoc2024/internal/day4"
@@ -44,6 +45,7 @@ func main() {
 	Register(7, func(input string) Solver { return day7.NewSolver(input) })
 	Register(8, func(input string) Solver { return day8.NewSolver(input) })
 	Register(9, func(input string) Solver { return day9.NewSolver(input) })
+	Register(10, func(input string) Solver { return day10.NewSolver(input) })
 
 	if *day == 0 {
 		runAllDays(*part)

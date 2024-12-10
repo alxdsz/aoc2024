@@ -52,6 +52,18 @@ func (inp *Input) As2DArray() [][]string {
 	return array
 }
 
+func (inp *Input) As2DIntArray() [][]int {
+	array := make([][]int, len(inp.lines))
+	for y, line := range inp.Lines() {
+		array[y] = make([]int, len(line))
+		for x, letter := range line {
+			num, _ := strconv.Atoi(string(letter))
+			array[y][x] = num
+		}
+	}
+	return array
+}
+
 func (inp *Input) SplitByEmptyLine() [][]string {
 	var result [][]string
 	var current []string
