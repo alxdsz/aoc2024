@@ -11,6 +11,7 @@ import (
 	"github.com/alxdsz/aoc2024/internal/day6"
 	"github.com/alxdsz/aoc2024/internal/day7"
 	"github.com/alxdsz/aoc2024/internal/day8"
+	"github.com/alxdsz/aoc2024/internal/day9"
 	"time"
 )
 
@@ -42,6 +43,7 @@ func main() {
 	Register(6, func(input string) Solver { return day6.NewSolver(input) })
 	Register(7, func(input string) Solver { return day7.NewSolver(input) })
 	Register(8, func(input string) Solver { return day8.NewSolver(input) })
+	Register(9, func(input string) Solver { return day9.NewSolver(input) })
 
 	if *day == 0 {
 		runAllDays(*part)
