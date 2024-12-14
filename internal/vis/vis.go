@@ -3,49 +3,10 @@ package vis
 import (
 	"fmt"
 	"image/color"
+	"math"
 	"strings"
 	"time"
 )
-
-func clearScreen() {
-	// ANSI escape codes:
-	// \033[2J  - clear entire screen
-	// \033[H   - move cursor to top-left corner
-	fmt.Print("\033[2J\033[H")
-}
-
-func Visualize2dArrayInTerminal2[T any](grid *[][]T, cell2ColorFun func(T) color.Color) {
-	clearScreen()
-	// Use Unicode block character
-	block := "█"
-
-	for i := range *grid {
-		for j := range (*grid)[i] {
-			c := cell2ColorFun((*grid)[i][j])
-			r, g, b, _ := c.RGBA()
-			// Convert from 0-65535 to 0-255 range
-			r, g, b = r>>8, g>>8, b>>8
-			// Print colored block using ANSI escape codes
-			fmt.Printf("\033[38;2;%d;%d;%dm%s\033[0m", r, g, b, block)
-		}
-		fmt.Println()
-	}
-}
-
-// Hide cursor
-func hideCursor() {
-	fmt.Print("\033[?25l")
-}
-
-// Show cursor
-func showCursor() {
-	fmt.Print("\033[?25h")
-}
-
-// Move cursor to specific position
-func moveCursor(row, col int) {
-	fmt.Printf("\033[%d;%dH", row+1, col+1)
-}
 
 func Visualize2dArrayInTerminal[T any](grid *[][]T, cell2ColorFun func(T) color.Color) {
 	// Build the entire frame as a string first
@@ -71,5 +32,31 @@ func Visualize2dArrayInTerminal[T any](grid *[][]T, cell2ColorFun func(T) color.
 	// Print entire frame at once
 	fmt.Print(sb.String())
 
-	time.Sleep(50 * time.Millisecond)
+	time.Sleep(500 * time.Millisecond)
+}
+
+func GenerateUniqueColor(i int) color.NRGBA {
+	// Use prime numbers for better distribution
+	primes := []int{2, 3, 5, 7, 11, 13, 17, 19, 23, 29}
+
+	// Get unique angles by combining multiple primes
+	angle := float64(i*primes[i%len(primes)]) * math.Pi / 50
+
+	// Vary saturation and value slightly for more uniqueness
+	s := 0.8 + 0.2*math.Sin(float64(i))
+	v := 0.9 + 0.1*math.Cos(float64(i))
+
+	// Convert polar coordinates to RGB
+	r := v * (1 + s*math.Cos(angle))
+	g := v * (1 + s*math.Cos(angle+2*math.Pi/3))
+	b := v * (1 + s*math.Cos(angle+4*math.Pi/3))
+
+	// Normalize and convert to uint8
+	max := math.Max(1.0, math.Max(r, math.Max(g, b)))
+	return color.NRGBA{
+		R: uint8(255 * r / max),
+		G: uint8(255 * g / max),
+		B: uint8(255 * b / max),
+		A: 255,
+	}
 }

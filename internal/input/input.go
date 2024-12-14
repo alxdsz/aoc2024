@@ -64,6 +64,17 @@ func (inp *Input) As2DIntArray() [][]int {
 	return array
 }
 
+func (inp *Input) As2DRuneArray() [][]rune {
+	array := make([][]rune, len(inp.lines))
+	for y, line := range inp.Lines() {
+		array[y] = make([]rune, len(line))
+		for x, letter := range line {
+			array[y][x] = letter
+		}
+	}
+	return array
+}
+
 func (inp *Input) SplitByEmptyLine() [][]string {
 	var result [][]string
 	var current []string
