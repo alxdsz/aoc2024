@@ -32,7 +32,7 @@ func Visualize2dArrayInTerminal[T any](grid *[][]T, cell2ColorFun func(T) color.
 	// Print entire frame at once
 	fmt.Print(sb.String())
 
-	time.Sleep(50 * time.Millisecond)
+	time.Sleep(10 * time.Millisecond)
 }
 
 func GenerateUniqueColor(i int) color.NRGBA {

@@ -8,10 +8,9 @@ import (
 )
 
 type Solver struct {
-	board           *[][]rune
-	bigBoard        *[][]rune
-	movements       string
-	currentMovement int
+	board     *[][]rune
+	bigBoard  *[][]rune
+	movements string
 }
 
 func enlargeSymbol(symbol rune) []rune {
@@ -49,7 +48,49 @@ func NewSolver(inputPath string) *Solver {
 		movements += movementLine
 	}
 
-	return &Solver{&board, &bigBoard, movements, 0}
+	return &Solver{&board, &bigBoard, movements}
+}
+
+func (s *Solver) SolvePart1() int {
+	x, y := findRobotPosition(s.board)
+	for _, movement := range s.movements {
+		visualizeBoard(s.board)
+		dx, dy := s.getDirection(movement)
+		moved := s.tryMoveElement(x, y, dx, dy, s.board)
+		if moved {
+			x, y = x+dx, y+dy
+		}
+	}
+	result := 0
+	for y, row := range *s.board {
+		for x, cell := range row {
+			if cell == 'O' {
+				result += 100*y + x
+			}
+		}
+	}
+	return result
+}
+
+func (s *Solver) SolvePart2() int {
+	x, y := findRobotPosition(s.bigBoard)
+	for _, movement := range s.movements {
+		//visualizeBoard(s.bigBoard)
+		dx, dy := s.getDirection(movement)
+		moved := s.tryMoveElement2(x, y, dx, dy, s.bigBoard)
+		if moved {
+			x, y = x+dx, y+dy
+		}
+	}
+	result := 0
+	for y, row := range *s.bigBoard {
+		for x, cell := range row {
+			if cell == '[' {
+				result += 100*y + x
+			}
+		}
+	}
+	return result
 }
 
 func (s *Solver) getDirection(mvmnt rune) (x int, y int) {
@@ -95,29 +136,64 @@ func (s *Solver) tryMoveElement(x, y, dx, dy int, board *[][]rune) bool {
 	return moved
 }
 
-func (s *Solver) SolvePart1() int {
-	x, y := findRobotPosition(s.board)
-	for _, movement := range s.movements {
-		visualizeBoard(s.board)
-		dx, dy := s.getDirection(movement)
-		moved := s.tryMoveElement(x, y, dx, dy, s.board)
-		if moved {
-			x, y = x+dx, y+dy
-		}
+func (s *Solver) tryMoveElement2(x, y, dx, dy int, board *[][]rune) bool {
+	nx, ny := x+dx, y+dy
+	if (*board)[ny][nx] == '#' {
+		return false
 	}
-	result := 0
-	for y, row := range *s.board {
-		for x, cell := range row {
-			if cell == 'O' {
-				result += 100*y + x
+	if (*board)[ny][nx] == '.' {
+		(*board)[ny][nx] = (*board)[y][x]
+		(*board)[y][x] = '.'
+		return true
+	}
+	var partnerX int
+	if (*board)[ny][nx] == '[' {
+		if (*board)[ny][nx+1] != ']' {
+			visualizeBoard(board)
+			panic("wrong")
+		}
+		partnerX = 1
+	} else if (*board)[ny][nx] == ']' {
+		if (*board)[ny][nx-1] != '[' {
+			visualizeBoard(board)
+			panic("wrong")
+		}
+		partnerX = -1
+	}
+
+	if partnerX != 0 {
+		if dy != 0 {
+			// test on copy :x
+			boardCopy := copyBoard(board)
+			if !s.tryMoveElement2(nx, ny, dx, dy, boardCopy) ||
+				!s.tryMoveElement2(nx+partnerX, ny, dx, dy, boardCopy) {
+				return false
 			}
+			// proceed
+			s.tryMoveElement2(nx, ny, dx, dy, board)
+			s.tryMoveElement2(nx+partnerX, ny, dx, dy, board)
+			(*board)[ny][nx] = (*board)[y][x]
+			(*board)[y][x] = '.'
+			return true
 		}
 	}
-	return result
+
+	moved := s.tryMoveElement(nx, ny, dx, dy, board)
+	if moved {
+		(*board)[ny][nx] = (*board)[y][x]
+		(*board)[y][x] = '.'
+	}
+	return moved
 }
 
-func (s *Solver) SolvePart2() int {
-	return 0
+func copyBoard(board *[][]rune) *[][]rune {
+	newBoard := make([][]rune, len(*board))
+	for i, row := range *board {
+		newRow := make([]rune, len(row))
+		copy(newRow, row)
+		newBoard[i] = newRow
+	}
+	return &newBoard
 }
 
 func visualizeBoard(board *[][]rune) {
