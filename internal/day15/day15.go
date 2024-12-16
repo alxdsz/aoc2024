@@ -1,0 +1,144 @@
+package day15
+
+import (
+	"fmt"
+	"github.com/alxdsz/aoc2024/internal/input"
+	"github.com/alxdsz/aoc2024/internal/vis"
+	"image/color"
+)
+
+type Solver struct {
+	board           *[][]rune
+	bigBoard        *[][]rune
+	movements       string
+	currentMovement int
+}
+
+func enlargeSymbol(symbol rune) []rune {
+	switch symbol {
+	case '#':
+		return []rune{'#', '#'}
+	case '@':
+		return []rune{'@', '.'}
+	case 'O':
+		return []rune{'[', ']'}
+	default:
+		return []rune{'.', '.'}
+	}
+}
+
+func NewSolver(inputPath string) *Solver {
+	inpt, _ := input.ReadFile(inputPath)
+	split := inpt.SplitByEmptyLine()
+	boardLines, movementLines := split[0], split[1]
+
+	var board [][]rune
+	var bigBoard [][]rune
+
+	for y, boardLine := range boardLines {
+		board = append(board, []rune{})
+		bigBoard = append(bigBoard, []rune{})
+		for _, symbol := range boardLine {
+			board[y] = append(board[y], symbol)
+			bigBoard[y] = append(bigBoard[y], enlargeSymbol(symbol)...)
+		}
+	}
+
+	movements := ""
+	for _, movementLine := range movementLines {
+		movements += movementLine
+	}
+
+	return &Solver{&board, &bigBoard, movements, 0}
+}
+
+func (s *Solver) getDirection(mvmnt rune) (x int, y int) {
+	switch mvmnt {
+	case '<':
+		return -1, 0
+	case '>':
+		return 1, 0
+	case '^':
+		return 0, -1
+	case 'v':
+		return 0, 1
+	}
+	panic("unknown movement")
+}
+
+func findRobotPosition(board *[][]rune) (x int, y int) {
+	for y, row := range *board {
+		for x, symbol := range row {
+			if symbol == '@' {
+				return x, y
+			}
+		}
+	}
+	panic("where is the robot!?")
+}
+
+func (s *Solver) tryMoveElement(x, y, dx, dy int, board *[][]rune) bool {
+	nx, ny := x+dx, y+dy
+	if (*board)[ny][nx] == '#' {
+		return false
+	}
+	if (*board)[ny][nx] == '.' {
+		(*board)[ny][nx] = (*board)[y][x]
+		(*board)[y][x] = '.'
+		return true
+	}
+	moved := s.tryMoveElement(nx, ny, dx, dy, board)
+	if moved {
+		(*board)[ny][nx] = (*board)[y][x]
+		(*board)[y][x] = '.'
+	}
+	return moved
+}
+
+func (s *Solver) SolvePart1() int {
+	x, y := findRobotPosition(s.board)
+	for _, movement := range s.movements {
+		visualizeBoard(s.board)
+		dx, dy := s.getDirection(movement)
+		moved := s.tryMoveElement(x, y, dx, dy, s.board)
+		if moved {
+			x, y = x+dx, y+dy
+		}
+	}
+	result := 0
+	for y, row := range *s.board {
+		for x, cell := range row {
+			if cell == 'O' {
+				result += 100*y + x
+			}
+		}
+	}
+	return result
+}
+
+func (s *Solver) SolvePart2() int {
+	return 0
+}
+
+func visualizeBoard(board *[][]rune) {
+	vis.Visualize2dArrayInTerminal(board, func(r rune) color.Color {
+		neonPink := color.RGBA{R: 255, G: 16, B: 240, A: 255}
+		neonBlue := color.RGBA{R: 17, G: 255, B: 253, A: 255}
+		neonYellow := color.RGBA{R: 255, G: 255, A: 255}
+		switch r {
+		case '@':
+			return neonBlue
+		case '#':
+			return neonYellow
+		case 'O':
+			return neonPink
+		case '[':
+			return neonPink
+		case ']':
+			return neonPink
+		default:
+			return color.Black
+		}
+		panic(fmt.Errorf("unknown symbol: %s", string(r)))
+	})
+}

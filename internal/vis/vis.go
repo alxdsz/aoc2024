@@ -15,7 +15,7 @@ func Visualize2dArrayInTerminal[T any](grid *[][]T, cell2ColorFun func(T) color.
 	// Move to top-left corner
 	sb.WriteString("\033[H")
 
-	block := "█"
+	block := "■ "
 	for i := range *grid {
 		for j := range (*grid)[i] {
 			c := cell2ColorFun((*grid)[i][j])
@@ -32,7 +32,7 @@ func Visualize2dArrayInTerminal[T any](grid *[][]T, cell2ColorFun func(T) color.
 	// Print entire frame at once
 	fmt.Print(sb.String())
 
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(50 * time.Millisecond)
 }
 
 func GenerateUniqueColor(i int) color.NRGBA {
