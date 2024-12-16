@@ -9,12 +9,32 @@ import (
 )
 
 func Visualize2dArrayInTerminal[T any](grid *[][]T, cell2ColorFun func(T) color.Color) {
-	// Build the entire frame as a string first
 	var sb strings.Builder
+
+	// Clear screen and scrollback buffer
+	sb.WriteString("\033[2J\033[3J")
+
+	// Find maximum width
+	maxWidth := 0
+	for _, row := range *grid {
+		if len(row) > maxWidth {
+			maxWidth = len(row)
+		}
+	}
 
 	// Move to top-left corner
 	sb.WriteString("\033[H")
 
+	// Pre-print blank lines to cover previous content
+	blankLine := strings.Repeat(" ", maxWidth*2+1) + "\n" // *2 because each cell is "■ "
+	for range *grid {
+		sb.WriteString(blankLine)
+	}
+
+	// Move back to top
+	sb.WriteString(fmt.Sprintf("\033[%dA", len(*grid)))
+
+	// Draw the actual grid
 	block := "■ "
 	for i := range *grid {
 		for j := range (*grid)[i] {
@@ -32,7 +52,7 @@ func Visualize2dArrayInTerminal[T any](grid *[][]T, cell2ColorFun func(T) color.
 	// Print entire frame at once
 	fmt.Print(sb.String())
 
-	time.Sleep(10 * time.Millisecond)
+	time.Sleep(300 * time.Millisecond)
 }
 
 func GenerateUniqueColor(i int) color.NRGBA {

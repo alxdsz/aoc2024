@@ -26,6 +26,11 @@ func ReadFile(path string) (*Input, error) {
 	return &Input{lines: lines}, scanner.Err()
 }
 
+func ReadFileUnsafe(path string) *Input {
+	inpt, _ := ReadFile(path)
+	return inpt
+}
+
 func (inp *Input) Lines() []string {
 	return inp.lines
 }
