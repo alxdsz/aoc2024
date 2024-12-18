@@ -1,6 +1,7 @@
 package day16
 
 import (
+	"container/heap"
 	"github.com/alxdsz/aoc2024/internal/input"
 	"math"
 )
@@ -54,104 +55,93 @@ var directions = []XY{
 	{0, -1}, // North
 }
 
-type State struct {
-	pos XY
-	dir int
+func (d *Solver) dijkstra(start XY, startDir int, isForward bool) map[State]int {
+	scores := make(map[State]int)
+	pq := make(PriorityQueue, 0)
+	heap.Init(&pq)
+
+	startState := State{start, startDir}
+	scores[startState] = 0
+	heap.Push(&pq, &Item{state: startState, score: 0})
+
+	for pq.Len() > 0 {
+		current := heap.Pop(&pq).(*Item)
+		state, score := current.state, current.score
+
+		if score > scores[state] {
+			continue
+		}
+
+		moveDir := state.dir
+		if !isForward {
+			moveDir = (state.dir + 2) % 4
+		}
+
+		dir := directions[moveDir]
+		newPos := XY{state.pos.x + dir.x, state.pos.y + dir.y}
+		if d.board.get(newPos.x, newPos.y) != '#' {
+			newState := State{newPos, state.dir}
+			newScore := score + 1
+			if bestScore, exists := scores[newState]; !exists || newScore < bestScore {
+				scores[newState] = newScore
+				heap.Push(&pq, &Item{state: newState, score: newScore})
+			}
+		}
+
+		for _, newDir := range []int{(state.dir + 3) % 4, (state.dir + 1) % 4} {
+			newState := State{state.pos, newDir}
+			newScore := score + 1000
+			if bestScore, exists := scores[newState]; !exists || newScore < bestScore {
+				scores[newState] = newScore
+				heap.Push(&pq, &Item{state: newState, score: newScore})
+			}
+		}
+	}
+
+	return scores
 }
 
-func (d *Solver) findMinScore() int {
-	bestScores := make(map[State]int)
+func (d *Solver) findOptimalTiles() (int, int) {
+	forwardScores := d.dijkstra(d.start, E, true)
+	backwardScores := make(map[State]int)
 	minScore := math.MaxInt
 
-	var dfs func(state State, score int)
-	dfs = func(state State, score int) {
+	for dir := 0; dir < 4; dir++ {
+		scores := d.dijkstra(d.end, dir, false)
+		for state, score := range scores {
+			if existing, exists := backwardScores[state]; !exists || score < existing {
+				backwardScores[state] = score
+			}
+		}
+	}
+
+	// Find minimum total score
+	for state, fScore := range forwardScores {
 		if state.pos == d.end {
-			if score < minScore {
-				minScore = score
+			if fScore < minScore {
+				minScore = fScore
 			}
-			return
 		}
-
-		if prevScore, exists := bestScores[state]; exists && prevScore <= score {
-			return
-		}
-		bestScores[state] = score
-
-		if score >= minScore {
-			return
-		}
-
-		dir := directions[state.dir]
-		newPos := XY{state.pos.x + dir.x, state.pos.y + dir.y}
-		if d.board.get(newPos.x, newPos.y) != '#' {
-			dfs(State{newPos, state.dir}, score+1)
-		}
-
-		dfs(State{state.pos, (state.dir + 3) % 4}, score+1000)
-		dfs(State{state.pos, (state.dir + 1) % 4}, score+1000)
 	}
 
-	dfs(State{d.start, E}, 0)
-	return minScore
-}
-
-func (d *Solver) findOptimalTiles(targetScore int) map[XY]bool {
 	optimalTiles := make(map[XY]bool)
-	visited := make(map[XY]map[State]bool) // track visited states per position
-
-	var dfs func(state State, score int, path []XY)
-	dfs = func(state State, score int, path []XY) {
-		// If we're over target score, this path isn't optimal
-		if score > targetScore {
-			return
-		}
-
-		// Initialize visited map for this position if needed
-		if _, exists := visited[state.pos]; !exists {
-			visited[state.pos] = make(map[State]bool)
-		}
-
-		// Check for cycles with same state and score
-		if visited[state.pos][state] {
-			return
-		}
-		visited[state.pos][state] = true
-
-		currentPath := append(path, state.pos)
-
-		// If we reached the end with exact target score, record all tiles in path
-		if state.pos == d.end && score == targetScore {
-			for _, pos := range currentPath {
-				optimalTiles[pos] = true
+	for state, fScore := range forwardScores {
+		if bScore, exists := backwardScores[state]; exists {
+			if fScore+bScore == minScore {
+				optimalTiles[state.pos] = true
 			}
-			visited[state.pos][state] = false
-			return
 		}
-
-		// Try moving forward
-		dir := directions[state.dir]
-		newPos := XY{state.pos.x + dir.x, state.pos.y + dir.y}
-		if d.board.get(newPos.x, newPos.y) != '#' {
-			dfs(State{newPos, state.dir}, score+1, currentPath)
-		}
-
-		// Try rotations
-		dfs(State{state.pos, (state.dir + 3) % 4}, score+1000, currentPath)
-		dfs(State{state.pos, (state.dir + 1) % 4}, score+1000, currentPath)
-
-		visited[state.pos][state] = false // backtrack
 	}
 
-	dfs(State{d.start, E}, 0, nil)
-	return optimalTiles
+	return minScore, len(optimalTiles)
 }
 
 func (d *Solver) SolvePart1() int {
-	return d.findMinScore()
+	score, _ := d.findOptimalTiles()
+	return score
 }
 
 func (d *Solver) SolvePart2() int {
-	minScore := d.findMinScore()
-	optimalTiles := d.findOptimalTiles(minScore)
-	return len(optimalTiles)
+	_, count := d.findOptimalTiles()
+	return count
 }
