@@ -95,13 +95,13 @@ func (s *Solver) countTokens() int {
 	return tokens
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	s.maxPress = 100
 	s.solve()
-	return s.countTokens()
+	return strconv.Itoa(s.countTokens())
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	s.maxPress = -1
 	const offset = 10000000000000
 	for i := range s.machines {
@@ -109,5 +109,5 @@ func (s *Solver) SolvePart2() int {
 		s.machines[i].prize.y += offset
 	}
 	s.solve()
-	return s.countTokens()
+	return strconv.Itoa(s.countTokens())
 }

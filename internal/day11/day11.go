@@ -48,20 +48,20 @@ func (s *Solver) transformStone(stone int, iteration int, maxIter int) int {
 	return result
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	total := 0
 	for _, stoneStr := range s.stones {
 		stone, _ := strconv.Atoi(stoneStr)
 		total += s.transformStone(stone, 0, 25)
 	}
-	return total
+	return strconv.Itoa(total)
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	total := 0
 	for _, stoneStr := range s.stones {
 		stone, _ := strconv.Atoi(stoneStr)
 		total += s.transformStone(stone, 0, 75)
 	}
-	return total
+	return strconv.Itoa(total)
 }

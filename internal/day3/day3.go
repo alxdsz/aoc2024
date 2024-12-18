@@ -4,6 +4,7 @@ import (
 	"github.com/alxdsz/aoc2024/internal/input"
 	"github.com/alxdsz/aoc2024/internal/utils"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -18,7 +19,7 @@ func NewSolver(inputPath string) *Solver {
 	}
 }
 
-func (d *Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() string {
 	pattern := `mul\((\d{1,3}),(\d{1,3})\)`
 	rgx, _ := regexp.Compile(pattern)
 	result := 0
@@ -28,10 +29,10 @@ func (d *Solver) SolvePart1() int {
 			result += nums[0] * nums[1]
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }
 
-func (d *Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() string {
 	pattern := `mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)`
 	rgx, _ := regexp.Compile(pattern)
 	result := 0
@@ -46,5 +47,5 @@ func (d *Solver) SolvePart2() int {
 			}
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }

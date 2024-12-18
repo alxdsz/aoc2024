@@ -53,7 +53,7 @@ func (d *Solver) isRowCorrect(splitPageRow []string) bool {
 	return true
 }
 
-func (d *Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() string {
 	result := 0
 	for _, pageRow := range d.pages {
 		splitPageRow := strings.Split(pageRow, ",")
@@ -64,10 +64,10 @@ func (d *Solver) SolvePart1() int {
 		}
 	}
 
-	return result
+	return strconv.Itoa(result)
 }
 
-func (d *Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() string {
 	result := 0
 	for _, pageRow := range d.pages {
 		splitPageRow := strings.Split(pageRow, ",")
@@ -80,5 +80,5 @@ func (d *Solver) SolvePart2() int {
 			result = result + num
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }

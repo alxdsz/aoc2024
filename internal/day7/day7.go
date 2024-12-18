@@ -62,7 +62,7 @@ func generateTwoOperatorCombinations(operatorCount int) [][]string {
 	return combinations
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	solution := 0
 	for _, eq := range s.calibrationEquations {
 		numOfOperators := len(eq.components) - 1
@@ -86,7 +86,7 @@ func (s *Solver) SolvePart1() int {
 			}
 		}
 	}
-	return solution
+	return strconv.Itoa(solution)
 }
 
 func generateThreeOperatorCombinations(operatorCount int) [][]string {
@@ -111,7 +111,7 @@ func generateThreeOperatorCombinations(operatorCount int) [][]string {
 	return combinations
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	solution := 0
 	for _, eq := range s.calibrationEquations {
 		numOfOperators := len(eq.components) - 1
@@ -144,5 +144,5 @@ func (s *Solver) SolvePart2() int {
 			}
 		}
 	}
-	return solution
+	return strconv.Itoa(solution)
 }

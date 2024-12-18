@@ -7,6 +7,7 @@ import (
 	"github.com/alxdsz/aoc2024/internal/vis"
 	"image/color"
 	"math"
+	"strconv"
 	"strings"
 )
 
@@ -181,7 +182,7 @@ func calculateSpatialEntropy(array [][]bool) float64 {
 	return imageLikelihood
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	seconds := 100
 	quadrants := []int{0, 0, 0, 0}
 	for _, robot := range s.robots {
@@ -193,10 +194,10 @@ func (s *Solver) SolvePart1() int {
 			quadrants[quadrant-1]++
 		}
 	}
-	return quadrants[0] * quadrants[1] * quadrants[2] * quadrants[3]
+	return strconv.Itoa(quadrants[0] * quadrants[1] * quadrants[2] * quadrants[3])
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	var board [][]bool
 	for y := 0; y < s.Ymax; y++ {
 		board = append(board, []bool{})
@@ -227,11 +228,11 @@ func (s *Solver) SolvePart2() int {
 			var in string
 			_, _ = fmt.Scanln(&in)
 			if in == "f" {
-				return i
+				return strconv.Itoa(i)
 			}
 		}
 		if i > 10000 {
-			return -1
+			return strconv.Itoa(-1)
 		}
 	}
 }

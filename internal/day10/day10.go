@@ -3,6 +3,7 @@ package day10
 import (
 	"fmt"
 	"github.com/alxdsz/aoc2024/internal/input"
+	"strconv"
 )
 
 type BoardPosition struct {
@@ -90,12 +91,12 @@ func (s *Solver) scoreTrailhead(startPosition BoardPosition) int {
 	return len(trailsReachingNine)
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	total := 0
 	for _, start := range s.findStartingPositions() {
 		total += s.scoreTrailhead(start)
 	}
-	return total
+	return strconv.Itoa(total)
 }
 
 func getPathKey(path []BoardPosition) string {
@@ -130,11 +131,12 @@ func (s *Solver) countUniquePaths(start BoardPosition) int {
 	return len(uniquePaths)
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	total := 0
 	for _, start := range s.findStartingPositions() {
 		pathCount := s.countUniquePaths(start)
 		total += pathCount
 	}
-	return total
+	return strconv.Itoa(total)
+
 }

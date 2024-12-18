@@ -4,6 +4,7 @@ import (
 	"github.com/alxdsz/aoc2024/internal/input"
 	"github.com/alxdsz/aoc2024/internal/utils"
 	"math"
+	"strconv"
 	"strings"
 )
 
@@ -18,7 +19,7 @@ func NewSolver(inputhPath string) *Solver {
 	}
 }
 
-func (d *Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() string {
 	result := 0
 	for _, row := range d.rows {
 		nums := strings.Split(row, " ")
@@ -26,10 +27,10 @@ func (d *Solver) SolvePart1() int {
 			result += 1
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }
 
-func (d *Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() string {
 	result := 0
 	for _, row := range d.rows {
 		nums := strings.Split(row, " ")
@@ -37,7 +38,7 @@ func (d *Solver) SolvePart2() int {
 			result += 1
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }
 
 func (d *Solver) removeElement(slice []string, s int) []string {

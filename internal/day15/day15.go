@@ -5,6 +5,7 @@ import (
 	"github.com/alxdsz/aoc2024/internal/input"
 	"github.com/alxdsz/aoc2024/internal/vis"
 	"image/color"
+	"strconv"
 )
 
 type Solver struct {
@@ -51,7 +52,7 @@ func NewSolver(inputPath string) *Solver {
 	return &Solver{&board, &bigBoard, movements}
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	x, y := findRobotPosition(s.board)
 	for _, movement := range s.movements {
 		visualizeBoard(s.board)
@@ -69,10 +70,10 @@ func (s *Solver) SolvePart1() int {
 			}
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	x, y := findRobotPosition(s.bigBoard)
 	for _, movement := range s.movements {
 		//visualizeBoard(s.bigBoard)
@@ -90,7 +91,7 @@ func (s *Solver) SolvePart2() int {
 			}
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }
 
 func (s *Solver) getDirection(mvmnt rune) (x int, y int) {

@@ -60,7 +60,7 @@ func isFinito(fs []string, numOfFiles int) bool {
 	return true
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	fs, space, numOfFiles := s.convertDiskMapToFS()
 	currentIndx := len(fs) - 1
 	for i := 0; i < len(space); i++ {
@@ -87,7 +87,7 @@ func (s *Solver) SolvePart1() int {
 		valInt, _ := strconv.Atoi(val)
 		result += i * valInt
 	}
-	return result
+	return strconv.Itoa(result)
 }
 
 func (s Solver) getDiskFiles() []File {
@@ -134,7 +134,7 @@ func findFreeSpace(fs []string, length int) int {
 	return -1
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	fs, _, _ := s.convertDiskMapToFS()
 	files := s.getDiskFiles()
 
@@ -165,5 +165,5 @@ func (s *Solver) SolvePart2() int {
 		valInt, _ := strconv.Atoi(val)
 		result += i * valInt
 	}
-	return result
+	return strconv.Itoa(result)
 }

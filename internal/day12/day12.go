@@ -7,6 +7,7 @@ import (
 	"image/color"
 	"math"
 	"slices"
+	"strconv"
 )
 
 type Coordinates struct {
@@ -137,7 +138,7 @@ func NewSolver(inputPath string) *Solver {
 	return &Solver{farm}
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	visited := make(map[Coordinates]bool)
 	totalPrice := 0
 	for y, row := range s.farm.board {
@@ -152,7 +153,7 @@ func (s *Solver) SolvePart1() int {
 			totalPrice += price
 		}
 	}
-	return totalPrice
+	return strconv.Itoa(totalPrice)
 }
 
 // patchwork
@@ -226,7 +227,7 @@ func (s *Solver) countSides(spots map[Coordinates]bool) int {
 
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	visited := make(map[Coordinates]bool)
 	s.farm.visualize()
 	totalPrice := 0
@@ -243,5 +244,5 @@ func (s *Solver) SolvePart2() int {
 			totalPrice += len(spots) * sides
 		}
 	}
-	return totalPrice
+	return strconv.Itoa(totalPrice)
 }

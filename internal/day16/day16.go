@@ -4,6 +4,7 @@ import (
 	"container/heap"
 	"github.com/alxdsz/aoc2024/internal/input"
 	"math"
+	"strconv"
 )
 
 type XY struct {
@@ -136,12 +137,12 @@ func (d *Solver) findOptimalTiles() (int, int) {
 	return minScore, len(optimalTiles)
 }
 
-func (d *Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() string {
 	score, _ := d.findOptimalTiles()
-	return score
+	return strconv.Itoa(score)
 }
 
-func (d *Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() string {
 	_, count := d.findOptimalTiles()
-	return count
+	return strconv.Itoa(count)
 }

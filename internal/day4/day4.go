@@ -2,6 +2,7 @@ package day4
 
 import (
 	"github.com/alxdsz/aoc2024/internal/input"
+	"strconv"
 	"strings"
 )
 
@@ -90,7 +91,7 @@ type TraverseSearchData struct {
 	searchedWordReversed string
 }
 
-func (d *Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() string {
 	searchedWord := "XMAS"
 	searchedWordReversed := "SAMX"
 	tsd := TraverseSearchData{
@@ -118,10 +119,10 @@ func (d *Solver) SolvePart1() int {
 			}
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }
 
-func (d *Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() string {
 	searchedWord := "MAS"
 	searchedWordReversed := "SAM"
 	tsd := TraverseSearchData{
@@ -140,5 +141,5 @@ func (d *Solver) SolvePart2() int {
 			}
 		}
 	}
-	return result
+	return strconv.Itoa(result)
 }

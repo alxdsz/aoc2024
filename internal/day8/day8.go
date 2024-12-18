@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/alxdsz/aoc2024/internal/input"
 	"math"
+	"strconv"
 )
 
 type FreqMap map[string][]Coordinates
@@ -61,7 +62,7 @@ func (s *Solver) validateAntiNodePosition(pos Coordinates) bool {
 	return isOnGrid && isWithinBoundaries
 }
 
-func (s *Solver) SolvePart1() int {
+func (s *Solver) SolvePart1() string {
 	uniquePositions := make(map[string]bool)
 	for _, freqs := range s.freqs {
 
@@ -87,7 +88,7 @@ func (s *Solver) SolvePart1() int {
 
 	}
 
-	return len(uniquePositions)
+	return strconv.Itoa(len(uniquePositions))
 }
 
 func isPointOnLine(a, b, p Coordinates) bool {
@@ -98,7 +99,7 @@ func isPointOnLine(a, b, p Coordinates) bool {
 	return true
 }
 
-func (s *Solver) SolvePart2() int {
+func (s *Solver) SolvePart2() string {
 	uniquePositions := make(map[string]bool)
 
 	for _, freqs := range s.freqs {
@@ -123,5 +124,5 @@ func (s *Solver) SolvePart2() int {
 		}
 	}
 
-	return len(uniquePositions)
+	return strconv.Itoa(len(uniquePositions))
 }

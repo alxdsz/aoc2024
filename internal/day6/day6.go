@@ -3,7 +3,7 @@ package day6
 import (
 	"fmt"
 	"github.com/alxdsz/aoc2024/internal/input"
-	"image/color"
+	"strconv"
 )
 
 // TODO remove duplications
@@ -30,21 +30,6 @@ func NewSolver(inputPath string) *Solver {
 	return &Solver{
 		board:     board,
 		starPoint: findStartPoint(board),
-	}
-}
-
-func cell2Color(cell string) color.Color {
-	switch cell {
-	case ".":
-		return color.NRGBA{R: 255, G: 255, B: 0, A: 255}
-	case "#":
-		return color.NRGBA{R: 0, G: 0, B: 255, A: 255}
-	case "X":
-		return color.NRGBA{R: 0, G: 0, B: 0, A: 255}
-	case "0":
-		return color.NRGBA{R: 255, G: 0, B: 255, A: 255}
-	default:
-		return color.NRGBA{R: 255, G: 0, B: 0, A: 255}
 	}
 }
 
@@ -99,16 +84,12 @@ func (d *Solver) doStep(cx, cy int, cdirection string) (nx, ny int, ndirection s
 	}
 }
 
-func (d *Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() string {
 	cx, cy := d.starPoint[0], d.starPoint[1]
 	currentDirection := UP
 	leftBoard := false
 	result := 0
 	for !leftBoard {
-		// TODO remove visualization or make possible to enable from terminal
-		//if math.Mod(float64(result), 5000) == 0 {
-		//	vis.Visualize2dArrayInTerminal(&d.board, cell2Color)
-		//}
 		var newSpotVisited bool
 		cx, cy, currentDirection, newSpotVisited, leftBoard = d.doStep(cx, cy, currentDirection)
 		if newSpotVisited {
@@ -116,7 +97,7 @@ func (d *Solver) SolvePart1() int {
 		}
 	}
 
-	return result
+	return strconv.Itoa(result)
 }
 
 // TODO ugly af but works
@@ -164,7 +145,7 @@ func (d *Solver) isGoodObstaclePosition(cx, cy int, cDirection string) bool {
 	}
 }
 
-func (d *Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() string {
 	startX, startY := d.starPoint[0], d.starPoint[1]
 	startDir := d.board[startY][startX]
 	result := 0
@@ -185,5 +166,5 @@ func (d *Solver) SolvePart2() int {
 		}
 	}
 
-	return result
+	return strconv.Itoa(result)
 }

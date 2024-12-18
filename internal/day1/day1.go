@@ -4,6 +4,7 @@ import (
 	"github.com/alxdsz/aoc2024/internal/input"
 	"math"
 	"sort"
+	"strconv"
 )
 
 type Solver struct {
@@ -22,16 +23,16 @@ func NewSolver(inputPath string) *Solver {
 	}
 }
 
-func (d *Solver) SolvePart1() int {
+func (d *Solver) SolvePart1() string {
 	result := 0
 	for i, leftNumber := range d.left {
 		rightNumber := d.right[i]
 		result = result + int(math.Abs(float64(rightNumber-leftNumber)))
 	}
-	return result
+	return strconv.Itoa(result)
 }
 
-func (d *Solver) SolvePart2() int {
+func (d *Solver) SolvePart2() string {
 	freqMap := make(map[int]int)
 	for _, rightNumber := range d.right {
 		freqMap[rightNumber]++
@@ -40,5 +41,5 @@ func (d *Solver) SolvePart2() int {
 	for _, leftNumber := range d.left {
 		result = result + freqMap[leftNumber]*leftNumber
 	}
-	return result
+	return strconv.Itoa(result)
 }
